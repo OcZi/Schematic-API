@@ -15,6 +15,8 @@ public interface Schematic {
 
     void paste(Location location);
 
+    void iterate(Location location, SchematicIteration iteration);
+
     short getWidth();
 
     short getLength();

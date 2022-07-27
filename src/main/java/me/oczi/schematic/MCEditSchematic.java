@@ -52,6 +52,11 @@ public class MCEditSchematic implements Schematic {
 
     @Override
     public void paste(Location location) {
+        iterate(location, this::pasteIterate);
+    }
+
+    @Override
+    public void iterate(Location location, SchematicIteration iteration) {
         location.subtract(width / 2.00, height / 2.00, length / 2.00);
         World world = location.getWorld();
         int blockX = location.getBlockX();
@@ -67,17 +72,18 @@ public class MCEditSchematic implements Schematic {
                         continue;
                     }
 
-                    Block block = world.getBlockAt(
+                    Location position = new Location(world,
                         x + blockX,
                         y + blockY,
                         z + blockZ);
-                    pasteIterate(block, blockValue, dataValue);
+                    iteration.iterate(position, blockValue, dataValue);
                 }
             }
         }
     }
 
-    protected void pasteIterate(Block blockPos, byte blockValue, byte dataValue) {
+    protected void pasteIterate(Location location, byte blockValue, byte dataValue) {
+        Block blockPos = location.getBlock();
         NMSUtil.setBlockFast(blockPos, blockValue, dataValue);
     }
 
@@ -89,7 +95,7 @@ public class MCEditSchematic implements Schematic {
         this.height = height;
     }
 
-    public void setIgnoreAir(boolean ignoreAir) {
+    public void ignoreAir(boolean ignoreAir) {
         this.ignoreAir = ignoreAir;
     }
 
