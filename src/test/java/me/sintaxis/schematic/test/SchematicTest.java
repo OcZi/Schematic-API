@@ -1,7 +1,6 @@
 package me.sintaxis.schematic.test;
 
 import me.sintaxis.schematic.MCEditSchematic;
-import me.sintaxis.schematic.Schematic;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
