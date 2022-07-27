@@ -9,6 +9,7 @@ import org.jnbt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -91,5 +92,16 @@ public class MCEditSchematic implements Schematic {
     @Override
     public byte[] getData() {
         return this.data;
+    }
+
+    @Override
+    public String toString() {
+        return "MCEditSchematic{" +
+            "width=" + width +
+            ", length=" + length +
+            ", height=" + height +
+            ", blocks=" + Arrays.toString(blocks) +
+            ", data=" + Arrays.toString(data) +
+            '}';
     }
 }
