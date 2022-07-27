@@ -9,12 +9,26 @@ import java.io.File;
  */
 public interface Schematic {
 
+    /**
+     * Factory of {@link Schematic}.
+     * Useful for injection like Guice.
+     */
     interface Factory {
         Schematic newSchematic(File file);
     }
 
+    /**
+     * Paste schematic at location.
+     * @param location Location to paste.
+     */
     void paste(Location location);
 
+    /**
+     * Iterate all blocks of the schematic
+     * with provided iteration function.
+     * @param location Location of schematic on iteration.
+     * @param iteration Iteration function to receive blocks.
+     */
     void iterate(Location location, SchematicIteration iteration);
 
     short getWidth();
