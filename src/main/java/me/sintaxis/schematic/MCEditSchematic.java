@@ -17,11 +17,11 @@ import java.util.Map;
  */
 public class MCEditSchematic implements Schematic {
 
-    private final short width;
-    private final short length;
-    private final short height;
-    private final byte[] blocks;
-    private final byte[] data;
+    protected final short width;
+    protected final short length;
+    protected final short height;
+    protected final byte[] blocks;
+    protected final byte[] data;
 
     public static void parseAndPaste(Location location, File file) throws IOException {
         MCEditSchematic.from(file).paste(location);
