@@ -3,12 +3,15 @@ package me.sintaxis.schematic;
 import org.bukkit.Location;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Schematic basic model class.
  */
 public interface Schematic {
+
+    interface Factory {
+        Schematic newSchematic(File file);
+    }
 
     void paste(Location location);
 
