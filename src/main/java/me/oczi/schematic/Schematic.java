@@ -1,4 +1,4 @@
-package me.sintaxis.schematic;
+package me.oczi.schematic;
 
 import org.bukkit.Location;
 

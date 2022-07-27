@@ -1,7 +1,7 @@
-package me.sintaxis.schematic;
+package me.oczi.schematic;
 
-import me.sintaxis.schematic.utils.ChildTagUtil;
-import me.sintaxis.schematic.utils.NMSUtil;
+import me.oczi.schematic.utils.ChildTagUtil;
+import me.oczi.schematic.utils.NMSUtil;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.jnbt.*;

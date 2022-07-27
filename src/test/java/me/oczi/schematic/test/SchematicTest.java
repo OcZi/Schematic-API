@@ -1,6 +1,6 @@
-package me.sintaxis.schematic.test;
+package me.oczi.schematic.test;
 
-import me.sintaxis.schematic.MCEditSchematic;
+import me.oczi.schematic.MCEditSchematic;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
