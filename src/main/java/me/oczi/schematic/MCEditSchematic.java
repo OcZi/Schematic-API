@@ -4,7 +4,6 @@ import me.oczi.schematic.utils.ChildTagUtil;
 import me.oczi.schematic.utils.NMSUtil;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.jnbt.*;
 
 import java.io.File;
@@ -83,8 +82,7 @@ public class MCEditSchematic implements Schematic {
     }
 
     protected void pasteIterate(Location location, byte blockValue, byte dataValue) {
-        Block blockPos = location.getBlock();
-        NMSUtil.setBlockFast(blockPos, blockValue, dataValue);
+        NMSUtil.setBlockFast(location, blockValue, dataValue);
     }
 
     public MCEditSchematic(short width, short length, short height, byte[] blocks, byte[] data) {
