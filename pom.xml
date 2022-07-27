@@ -10,6 +10,16 @@
     <packaging>jar</packaging>
 
     <name>Schematic-API</name>
+    <contributors>
+        <contributor>
+            <name>Sintaxis</name>
+            <url>https://github.com/siansxint</url>
+        </contributor>
+        <contributor>
+            <name>OcZi (Salva)</name>
+            <url>https://github.com/OcZi</url>
+        </contributor>
+    </contributors>
 
     <properties>
         <java.version>1.8</java.version>
