@@ -1,43 +1,25 @@
 package me.sintaxis.schematic;
 
+import org.bukkit.Location;
+
+import java.io.File;
+import java.io.IOException;
+
 /**
- * Schematic model class.
- *
- *
+ * Schematic basic model class.
  */
-public class Schematic {
+public interface Schematic {
 
-    private final short width;
-    private final short length;
-    private final short height;
-    private final byte[] blocks;
-    private final byte[] data;
+    void paste(Location location);
 
-    public Schematic(short width, short length, short height, byte[] blocks, byte[] data) {
-        this.blocks = blocks;
-        this.data = data;
-        this.width = width;
-        this.length = length;
-        this.height = height;
-    }
+    short getWidth();
 
-    public short getWidth() {
-        return this.width;
-    }
+    short getLength();
 
-    public short getLength() {
-        return this.length;
-    }
+    short getHeight();
 
-    public short getHeight() {
-        return this.height;
-    }
+    byte[] getBlocks();
 
-    public byte[] getBlocks() {
-        return this.blocks;
-    }
+    byte[] getData();
 
-    public byte[] getData() {
-        return this.data;
-    }
 }
