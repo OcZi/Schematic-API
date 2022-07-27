@@ -4,9 +4,9 @@ import org.jnbt.Tag;
 
 import java.util.Map;
 
-public class ChildTagUtil {
+public interface ChildTagUtil {
 
-    public static <T extends Tag> T getChildTag(Map<String, Tag> items, String key, Class<T> expected) {
+    static <T extends Tag> T getChildTag(Map<String, Tag> items, String key, Class<T> expected) {
         if (!items.containsKey(key)) {
             throw new IllegalArgumentException("Schematic file need the \"" + key + "\" tag");
         }
