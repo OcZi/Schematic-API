@@ -29,7 +29,9 @@ public interface Schematic {
      * @param location Location of schematic on iteration.
      * @param iteration Iteration function to receive blocks.
      */
-    void iterate(Location location, SchematicIteration iteration);
+    void iterate(Location location, SchematicWorldIteration iteration);
+
+    void iterate(SchematicRelativeIteration iteration);
 
     void setIgnoreAir(boolean ignoreAir);
 

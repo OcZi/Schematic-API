@@ -3,6 +3,7 @@ package me.oczi.schematic;
 import me.oczi.schematic.utils.NMSUtil;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.util.Vector;
 import org.jnbt.*;
 
 import java.io.File;
@@ -82,7 +83,7 @@ public class MCEditSchematic implements Schematic {
     }
 
     @Override
-    public void iterate(Location location, SchematicIteration iteration) {
+    public void iterate(Location location, SchematicWorldIteration iteration) {
         location = location.clone();
         location.subtract(width / 2.00, height / 2.00, length / 2.00);
         World world = location.getWorld();
@@ -94,15 +95,37 @@ public class MCEditSchematic implements Schematic {
                 for (int z = 0; z < length; ++z) {
                     int index = y * width * length + z * width + x;
                     short blockValue = blocks[index];
-                    byte dataValue = data[index];
                     if (ignoreAir && blockValue == 0) {
                         continue;
                     }
+                    byte dataValue = data[index];
 
                     Location position = new Location(world,
                         x + blockX,
                         y + blockY,
                         z + blockZ);
+                    iteration.iterate(position, blockValue, dataValue);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void iterate(SchematicRelativeIteration iteration) {
+        for (int x = 0; x < width; ++x) {
+            for (int y = 0; y < height; ++y) {
+                for (int z = 0; z < length; ++z) {
+                    int index = y * width * length + z * width + x;
+                    short blockValue = blocks[index];
+                    if (ignoreAir && blockValue == 0) {
+                        continue;
+                    }
+                    byte dataValue = data[index];
+
+                    Vector position = new Vector(
+                        x,
+                        y,
+                        z);
                     iteration.iterate(position, blockValue, dataValue);
                 }
             }
