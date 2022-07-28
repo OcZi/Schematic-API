@@ -68,6 +68,14 @@ public class MCEditSchematic implements Schematic {
         return new MCEditSchematic(width, length, height, blocks, blockData);
     }
 
+    public MCEditSchematic(short width, short length, short height, short[] blocks, byte[] data) {
+        this.blocks = blocks;
+        this.data = data;
+        this.width = width;
+        this.length = length;
+        this.height = height;
+    }
+
     @Override
     public void paste(Location location) {
         iterate(location, this::pasteIterate);
@@ -101,20 +109,18 @@ public class MCEditSchematic implements Schematic {
         }
     }
 
+    @Override
+    public void setIgnoreAir(boolean ignoreAir) {
+        this.ignoreAir = ignoreAir;
+    }
+
     protected void pasteIterate(Location location, short blockValue, byte dataValue) {
         NMSUtil.setBlockFast(location, blockValue, dataValue);
     }
 
-    public MCEditSchematic(short width, short length, short height, short[] blocks, byte[] data) {
-        this.blocks = blocks;
-        this.data = data;
-        this.width = width;
-        this.length = length;
-        this.height = height;
-    }
-
-    public void ignoreAir(boolean ignoreAir) {
-        this.ignoreAir = ignoreAir;
+    @Override
+    public boolean isIgnoreAir() {
+        return ignoreAir;
     }
 
     @Override

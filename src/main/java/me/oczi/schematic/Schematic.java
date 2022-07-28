@@ -31,6 +31,10 @@ public interface Schematic {
      */
     void iterate(Location location, SchematicIteration iteration);
 
+    void setIgnoreAir(boolean ignoreAir);
+
+    boolean isIgnoreAir();
+
     short getWidth();
 
     short getLength();
