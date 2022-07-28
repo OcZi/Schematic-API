@@ -75,6 +75,7 @@ public class MCEditSchematic implements Schematic {
 
     @Override
     public void iterate(Location location, SchematicIteration iteration) {
+        location = location.clone();
         location.subtract(width / 2.00, height / 2.00, length / 2.00);
         World world = location.getWorld();
         int blockX = location.getBlockX();
