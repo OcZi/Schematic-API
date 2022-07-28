@@ -4,5 +4,5 @@ import org.bukkit.Location;
 
 public interface SchematicIteration {
 
-    void iterate(Location location, byte blockValue, byte dataValue);
+    void iterate(Location location, short blockValue, byte dataValue);
 }

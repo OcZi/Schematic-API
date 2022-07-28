@@ -37,7 +37,7 @@ public interface Schematic {
 
     short getHeight();
 
-    byte[] getBlocks();
+    short[] getBlocks();
 
     byte[] getData();
 
