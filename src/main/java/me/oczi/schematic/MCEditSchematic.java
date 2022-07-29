@@ -19,29 +19,48 @@ import static me.oczi.schematic.utils.ChildTagUtil.getChildTag;
  */
 public class MCEditSchematic implements Schematic {
 
-    protected final short width;
-    protected final short length;
-    protected final short height;
+    protected final Vector size;
+    protected final Vector offset;
+    protected final Vector origin;
     protected final short[] blocks;
     protected final byte[] data;
 
     protected boolean ignoreAir;
 
     public static void parseAndPaste(Location location, File file) throws IOException {
-        MCEditSchematic.from(file).paste(location);
+        new MCEditSchematic(file).paste(location);
     }
 
-    public static MCEditSchematic from(File file) throws IOException {
+    public MCEditSchematic(File file) throws IOException {
         CompoundTag schematicTag;
         try (FileInputStream stream = new FileInputStream(file)) {
             try (NBTInputStream nbtStream = new NBTInputStream(stream)) {
                 schematicTag = (CompoundTag) nbtStream.readTag();
             }
         }
+
         Map<String, Tag> schematic = schematicTag.getValue();
         short width = getChildTag(schematic, "Width", ShortTag.class).getValue();
-        short length = getChildTag(schematic, "Length", ShortTag.class).getValue();
         short height = getChildTag(schematic, "Height", ShortTag.class).getValue();
+        short length = getChildTag(schematic, "Length", ShortTag.class).getValue();
+        Vector size = new Vector(width, height, length);
+        Vector offset;
+        Vector origin;
+
+        try {
+            int originX = getChildTag(schematic, "WEOriginX", IntTag.class).getValue();
+            int originY = getChildTag(schematic, "WEOriginY", IntTag.class).getValue();
+            int originZ = getChildTag(schematic, "WEOriginZ", IntTag.class).getValue();
+            origin = new Vector(originX, originY, originZ);
+
+            int offsetX = getChildTag(schematic, "WEOffsetX", IntTag.class).getValue();
+            int offsetY = getChildTag(schematic, "WEOffsetY", IntTag.class).getValue();
+            int offsetZ = getChildTag(schematic, "WEOffsetZ", IntTag.class).getValue();
+            offset = new Vector(offsetX, offsetY, offsetZ);
+        } catch (IOException ignored) {
+            origin = new Vector(0, 0, 0);
+            offset = origin.clone();
+        }
         String materials = getChildTag(schematic, "Materials", StringTag.class).getValue();
         if (!materials.equals("Alpha")) {
             throw new IllegalArgumentException("Schematic file is not an Alpha schematic");
@@ -59,22 +78,26 @@ public class MCEditSchematic implements Schematic {
             if ((index >> 1) >= addId.length) {
                 blocks[index] = (short) (blocksId[index] & 0xFF);
             } else {
-                int left = (index & 1) == 0
-                    ? (addId[index >> 1] & 0x0F) << 8
-                    : (addId[index >> 1] & 0xF0) << 4;
-                blocks[index] = (short) (left + (blocksId[index] & 0xFF));
+                short left = (short) ((index & 1) == 0
+                                    ? (addId[index >> 1] & 0x0F) << 8
+                                    : (addId[index >> 1] & 0xF0) << 4);
+                blocks[index] = (short) (left + (blocksId[index] & 255));
             }
         }
 
-        return new MCEditSchematic(width, length, height, blocks, blockData);
+        this.blocks = blocks;
+        this.data = blockData;
+        this.size = size;
+        this.offset = offset;
+        this.origin = origin;
     }
 
-    public MCEditSchematic(short width, short length, short height, short[] blocks, byte[] data) {
+    public MCEditSchematic(Vector size, Vector offset, Vector origin, short[] blocks, byte[] data) {
         this.blocks = blocks;
         this.data = data;
-        this.width = width;
-        this.length = length;
-        this.height = height;
+        this.size = size;
+        this.offset = offset;
+        this.origin = origin;
     }
 
     @Override
@@ -84,8 +107,12 @@ public class MCEditSchematic implements Schematic {
 
     @Override
     public void iterate(Location location, SchematicWorldIteration iteration) {
-        location = location.clone();
-        location.subtract(width / 2.00, height / 2.00, length / 2.00);
+        int width = this.size.getBlockX();
+        int height = this.size.getBlockY();
+        int length = this.size.getBlockZ();
+
+        location = location.clone().add(offset);
+        // location.subtract(width / 2.00, height / 2.00, length / 2.00);
         World world = location.getWorld();
         int blockX = location.getBlockX();
         int blockY = location.getBlockY();
@@ -112,6 +139,9 @@ public class MCEditSchematic implements Schematic {
 
     @Override
     public void iterate(SchematicRelativeIteration iteration) {
+        int width = this.size.getBlockX();
+        int height = this.size.getBlockY();
+        int length = this.size.getBlockZ();
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
                 for (int z = 0; z < length; ++z) {
@@ -122,10 +152,7 @@ public class MCEditSchematic implements Schematic {
                     }
                     byte dataValue = data[index];
 
-                    Vector position = new Vector(
-                        x,
-                        y,
-                        z);
+                    Vector position = new Vector(x, y, z);
                     iteration.iterate(position, blockValue, dataValue);
                 }
             }
@@ -137,8 +164,23 @@ public class MCEditSchematic implements Schematic {
         this.ignoreAir = ignoreAir;
     }
 
-    protected void pasteIterate(Location location, short blockValue, byte dataValue) {
+    protected void pasteIterate(Location location, int blockValue, byte dataValue) {
         NMSUtil.setBlockFast(location, blockValue, dataValue);
+    }
+
+    @Override
+    public Vector getSize() {
+        return size.clone();
+    }
+
+    @Override
+    public Vector getOffset() {
+        return offset.clone();
+    }
+
+    @Override
+    public Vector getOrigin() {
+        return origin.clone();
     }
 
     @Override
@@ -147,18 +189,18 @@ public class MCEditSchematic implements Schematic {
     }
 
     @Override
-    public short getWidth() {
-        return this.width;
+    public int getWidth() {
+        return size.getBlockX();
     }
 
     @Override
-    public short getLength() {
-        return this.length;
+    public int getHeight() {
+        return size.getBlockY();
     }
 
     @Override
-    public short getHeight() {
-        return this.height;
+    public int getLength() {
+        return size.getBlockZ();
     }
 
     @Override
@@ -174,11 +216,12 @@ public class MCEditSchematic implements Schematic {
     @Override
     public String toString() {
         return "MCEditSchematic{" +
-            "width=" + width +
-            ", length=" + length +
-            ", height=" + height +
+            "size=" + size +
+            ", offset=" + offset +
+            ", origin=" + origin +
             ", blocks=" + Arrays.toString(blocks) +
             ", data=" + Arrays.toString(data) +
+            ", ignoreAir=" + ignoreAir +
             '}';
     }
 }

@@ -1,6 +1,7 @@
 package me.oczi.schematic;
 
 import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
 import java.io.File;
 
@@ -35,13 +36,19 @@ public interface Schematic {
 
     void setIgnoreAir(boolean ignoreAir);
 
+    Vector getSize();
+
+    Vector getOffset();
+
+    Vector getOrigin();
+
     boolean isIgnoreAir();
 
-    short getWidth();
+    int getWidth();
 
-    short getLength();
+    int getLength();
 
-    short getHeight();
+    int getHeight();
 
     short[] getBlocks();
 
