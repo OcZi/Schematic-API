@@ -4,7 +4,7 @@ A simple API using JNBT to read schematics with old MCEdit format.
 Create a new instance of MCEditSchematic with a file (.schematic format)  
 and operates on it (paste, iterate all blocks relative to a center point or not, etc).
 
-#### This is a fork of [Sintaxis's Schematic API](https://github.com/siansxint/Schematic-API/).
+#### This is a fork of [siansxint's Schematic API](https://github.com/siansxint/Schematic-API/).
 
 ## Maven
 ```xml
