@@ -7,8 +7,9 @@ import org.bukkit.util.Vector;
 import org.jnbt.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -32,11 +33,15 @@ public class MCEditSchematic implements Schematic {
     }
 
     public MCEditSchematic(File file) throws IOException {
+        this(Files.newInputStream(file.toPath()));
+    }
+
+    public MCEditSchematic(InputStream stream) throws IOException {
         CompoundTag schematicTag;
-        try (FileInputStream stream = new FileInputStream(file)) {
-            try (NBTInputStream nbtStream = new NBTInputStream(stream)) {
-                schematicTag = (CompoundTag) nbtStream.readTag();
-            }
+        try (NBTInputStream nbtStream = new NBTInputStream(stream)) {
+            schematicTag = (CompoundTag) nbtStream.readTag();
+        } finally {
+            stream.close();
         }
 
         Map<String, Tag> schematic = schematicTag.getValue();
@@ -79,8 +84,8 @@ public class MCEditSchematic implements Schematic {
                 blocks[index] = (short) (blocksId[index] & 0xFF);
             } else {
                 short left = (short) ((index & 1) == 0
-                                    ? (addId[index >> 1] & 0x0F) << 8
-                                    : (addId[index >> 1] & 0xF0) << 4);
+                    ? (addId[index >> 1] & 0x0F) << 8
+                    : (addId[index >> 1] & 0xF0) << 4);
                 blocks[index] = (short) (left + (blocksId[index] & 255));
             }
         }
