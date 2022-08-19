@@ -18,6 +18,6 @@ and operates on it (paste, iterate all blocks relative to a center point or not,
 <dependency>
   <groupId>me.oczi.schematic</groupId>
   <artifactId>Schematic-API</artifactId>
-  <version>1.2.4</version>
+  <version>1.2.5</version>
 </dependency>
 ```
